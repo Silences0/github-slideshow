@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/layuiadmin/style/admin.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<form class="layui-form" action="" id="formSub" method="post">
+    <input type="hidden" th:value="${user.getId()}" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名：</label>
+        <div class="layui-input-block">
+            <input type="text" name="username" th:value="${user.getUsername()}" lay-verify="required"
+                   lay-reqtext="用户名是必填项，岂能为空？" placeholder="请输入"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码：</label>
+        <div class="layui-input-inline">
+            <input type="password" th:value="${user.getPassword()}" name="password" lay-verify="pass"
+                   placeholder="请输入密码" autocomplete="off"
+                   class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机号：</label>
+        <div class="layui-input-inline">
+            <input type="text" th:value="${user.getPhone()}" name="phone" lay-verify="pass" placeholder="请输入手机号"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户角色</label>
+        <div class="layui-input-block">
+            <input th:each="role,userStat:${roles}"
+                   type="checkbox" name="roles" th:value="${role.id}" th:title="${role.roleNameZH}">
+            <input th:each="userRole:${user.getRoles()}" checked
+                   type="checkbox" name="roles" th:value="${userRole.id}" th:title="${userRole.roleNameZH}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否启用</label>
+        <div class="layui-input-block">
+            <input type="checkbox" checked="" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script src="/static/layuiadmin/layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var $ = layui.$
+            , form = layui.form;
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //创建一个编辑器
+        var editIndex = layedit.build('LAY_demo_editor');
+
+        //自定义验证规则
+        form.verify({
+            title: function (value) {
+                if (value.length < 5) {
+                    return '标题至少得5个字符啊';
+                }
+            }
+            , pass: [
+                /^[\S]{6,12}$/
+                , '密码必须6到12位，且不能出现空格'
+            ]
+            , content: function (value) {
+                layedit.sync(editIndex);
+            }
+        });
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            var data1 = data.field;
+            var arr = new Array();
+            $("input:checkbox[name='roles']:checked").each(function (i) {
+                arr[i] = $(this).val();
+            });
+            data.field.like = arr.join(",");//将数组合并成字符串
+            alert(data);
+            var data = data.field;
+            $.ajax({
+                url: '/modifyUser',
+                method: 'post',
+                data: {
+                    "id": data1.id, "open": data1.open, "password": data1.password
+                    , "phone": data1.phone, "roles": data1.like, "username": data1.username
+                },
+                dataType: 'JSON',
+                success: function (res) {
+                    window.parent.location.reload();
+                    //关闭当前窗口
+                    parent.layer.closeAll();
+                }
+            })
+            return false;
+            /*layer.alert(JSON.stringify(data.field), {
+             th:action="@{/modifyUser}"
+                title: '最终的提交信息',
+            })*/
+            //return false;
+        });
+
+    });
+</script>

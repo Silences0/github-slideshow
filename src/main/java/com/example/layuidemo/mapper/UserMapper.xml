@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.layuidemo.mapper.UserMapper">
+    <select id="getAllUser" resultType="com.example.layuidemo.entity.User">
+        select * from user
+        where 1=1
+        <if test="id !=null and id !=0">
+            and id = #{id}
+        </if>
+        <if test="email != null and email !=''">
+            and email =#{email}
+        </if>
+        <if test="username != null and username!=''">
+            and username = #{username}
+        </if>
+    </select>
+    <select id="loadUserByUsername" resultType="com.example.layuidemo.entity.User">
+        select * from user where username=#{username}
+    </select>
+    <select id="getUserRolesByUid" resultType="com.example.layuidemo.entity.Role">
+        select * from `role` r ,user_role ur where r.id = ur.rid and ur.uid=#{uid}
+    </select>
+    <select id="getUserById" resultType="com.example.layuidemo.entity.User">
+        select * from user where id=#{id}
+    </select>
+    <select id="getCount" resultType="Integer">
+        select count(1) from user
+        where 1=1
+        <if test="id !=null and id !=0">
+            and id = #{id}
+        </if>
+        <if test="email != null and email !=''">
+            and email =#{email}
+        </if>
+        <if test="username != null and username!=''">
+            and username = #{username}
+        </if>
+    </select>
+    <insert id="addUser">
+        insert into user (username,password,isenable,islocked,createDate,createBy,modifyDate,modifyBy,amount)
+         values (#{username},#{password},#{isenable},#{islocked},#{createDate},#{createBy},#{modifyDate},#{modifyBy},#{amount})
+    </insert>
+    <delete id="deleteUser">
+        delete from user where id in
+        <foreach collection="ids" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </delete>
+    <update id="updateUser">
+        update user set username=#{username},password=#{password} where id=#{id}
+    </update>
+    <update id="updateMoeny">
+        UPDATE
+  `newmgr`.`user`
+SET
+  `amount` = `amount` + #{moeny}
+WHERE `id` = #{id} ;
+    </update>
+    <update id="updateUserAll">
+        UPDATE
+  `newmgr`.`user`
+SET
+  `username` = #{username},
+  `password` = #{password},
+
+  `isenable` = #{isenable},
+  `islocked` = #{islocked},
+
+  `modifyDate` = #{modifyDate},
+  `modifyBy` = #{modifyBy},
+  `phone` = #{phone}
+WHERE `id` = #{id} ;
+
+
+    </update>
+    <select id="getUserNameById" resultType="String">
+        select username from user where id=#{id}
+    </select>
+    <select id="getUidByName" resultType="Integer">
+        select id from `user` where username=#{username}
+    </select>
+    <select id="getUserByName" resultType="com.example.layuidemo.entity.User">
+        select * from `user` where username=#{username}
+    </select>
+</mapper>

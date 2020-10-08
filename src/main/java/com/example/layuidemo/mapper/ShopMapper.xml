@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.layuidemo.mapper.ShopMapper">
+    <select id="getAllShopByPage" resultType="com.example.layuidemo.entity.Shop">
+        select * from shop limit #{start},#{size}
+    </select>
+    <select id="getShopById" resultType="com.example.layuidemo.entity.Shop">
+        select * from shop where id=#{id}
+    </select>
+</mapper>

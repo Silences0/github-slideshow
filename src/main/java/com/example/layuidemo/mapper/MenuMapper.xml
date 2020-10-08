@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.layuidemo.mapper.MenuMapper">
+    <resultMap id="resultMap" type="com.example.layuidemo.entity.Menu">
+        <id property="id" column="id"></id>
+        <result column="url" property="url"></result>
+        <result column="name" property="name"></result>
+        <result column="menuType" property="menuType"></result>
+        <result column="parentId" property="parentId"></result>
+        <collection property="roles" ofType="com.example.layuidemo.entity.Role">
+            <id column="rid" property="id"></id>
+            <result column="rolename" property="roleName"></result>
+            <result column="rolenameZH" property="roleNameZH"></result>
+        </collection>
+    </resultMap>
+    <delete id="delRole_MenuByRid">
+        DELETE
+FROM
+  `newmgr`.`role_menu`
+WHERE `rid` = #{id} ;
+    </delete>
+    <delete id="delRole_MenuByMid">
+        DELETE
+FROM
+  `newmgr`.`role_menu`
+WHERE `mid` = #{id} ;
+
+    </delete>
+    <delete id="delMenu">
+DELETE
+FROM
+  `newmgr`.`menu`
+WHERE `id` = #{id} ;
+    </delete>
+    <delete id="delChildrenMenu">
+DELETE
+FROM
+  `newmgr`.`menu`
+WHERE `parentId` = #{id} ;
+    </delete>
+    <select id="getAllMenu" resultMap="resultMap">
+        SELECT m.* ,r.id AS rid ,r.rolename AS rolename,r.rolenameZH AS rolenameZH
+        FROM menu m
+        LEFT JOIN role_menu rm ON rm.mid = m.id
+        LEFT JOIN role r ON rm.rid = r.id
+    </select>
+    <select id="getAllChildMenu" resultType="com.example.layuidemo.entity.Menu">
+        select * from menu where parentId = #{parentId}
+    </select>
+    <select id="getMenuCount" resultType="Integer">
+        select count(*) from menu
+    </select>
+    <select id="getAllMenuByPage" resultType="com.example.layuidemo.entity.Menu">
+        select * from menu limit #{start},#{size}
+    </select>
+    <select id="getAllParentMenuByRole" resultType="com.example.layuidemo.entity.Menu">
+        SELECT * FROM menu WHERE menu.`id` IN (
+	SELECT role_menu.`mid` FROM role_menu WHERE role_menu.`rid`=(
+		SELECT id FROM role WHERE role.`rolename`=#{roleName}
+	)
+)
+    </select>
+    <select id="getAllParentMenu" resultType="com.example.layuidemo.entity.Menu">
+        select * from menu where parentId=0
+    </select>
+    <insert id="updateMenuAndRole">
+        insert into  role_menu (rid,mid) values (#{roleId},#{menuId})
+    </insert>
+    <insert id="addMenu">
+        INSERT INTO `newmgr`.`menu` (
+
+  `name`,
+  `parentId`,
+  `url`,
+  `menuType`
+)
+VALUES
+  (
+    #{name},
+    #{parentId},
+    #{url},
+    #{menuType}
+  ) ;
+    </insert>
+</mapper>

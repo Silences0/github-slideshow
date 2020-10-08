@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.layuidemo.mapper.RoleMapper">
+    <update id="modifyRole">
+        UPDATE
+  `newmgr`.`role`
+SET
+  `rolename` = #{roleName},
+  `rolenameZH` = #{roleNameZH}
+WHERE `id` = #{id} ;
+
+    </update>
+    <delete id="delRoleByUserId">
+        DELETE
+FROM
+  `newmgr`.`user_role`
+WHERE `uid` = #{id} ;
+
+
+    </delete>
+    <delete id="delRole">
+        DELETE
+FROM
+  `newmgr`.`role`
+WHERE `id` = #{id} ;
+
+
+    </delete>
+    <select id="getAllRoles" resultType="com.example.layuidemo.entity.Role">
+        select * from role limit #{start},#{size}
+    </select>
+    <select id="getRoleCount" resultType="Integer">
+        select count(1) from role;
+    </select>
+    <select id="getRoles" resultType="com.example.layuidemo.entity.Role">
+        select * from role
+    </select>
+    <insert id="addUserRole">
+        insert into user_role (uid,rid) values (#{userId},#{roleId})
+    </insert>
+    <insert id="addRole">
+        insert into role (rolename,rolenameZH) values (#{roleName},#{roleNameZH})
+    </insert>
+</mapper>

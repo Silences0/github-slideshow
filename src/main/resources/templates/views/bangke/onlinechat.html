@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/layuiadmin/style/admin.css" media="all">
+</head>
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<script src="/static/layuiadmin/layui/layui.js" charset="utf-8"></script>
+<script>
+    var stompClient = null;
+
+    function connect() {
+        var socket = new SockJS('/chat');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            stompClient.subscribe('/user/queue/chat', function (chat) {
+                showGreeting(JSON.stringify(chat.body)); // 会转成json字符串""
+                //showGreeting(JSON.parse(chat.body));
+            });
+        });
+    }
+
+    function sendMSG() {
+        stompClient.send("/app/chat", {}, JSON.stringify({
+            'content': $("#content").val(),
+            'to': $("#to").val()
+        }));
+    }
+
+    function showGreeting(message) {
+        //json字符串转JSON对象  { dsadsd}
+        var obj = eval('(' + message + ')');
+        var obj1 = eval('(' + obj + ')');
+        $("#chatsContent")
+            .append("<div>" + obj1.from + ":" + obj1.content + "</div>")
+    }
+
+    $(document).ready(function () {
+        connect();
+        $("#send").click(function () {
+            sendMSG();
+        })
+    })
+</script>
+<body>
+<div id="chat">
+    <div class="layui-form-item">
+        <label class="layui-form-label">请输入：</label>
+        <div class="layui-input-block">
+            <input type="text" id="content" name="title" lay-verify="title" autocomplete="off" placeholder="请输入聊天内容"
+                   class="layui-input">
+        </div>
+    </div>
+    <input type="hidden" th:value="${bangKeName}" id="to">
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" id="send" class="layui-btn" lay-submit="" lay-filter="demo1">发送</button>
+        </div>
+    </div>
+    <br>
+    <div id="chatsContent">
+    </div>
+</div>
+</body>
+</html>

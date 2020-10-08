@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.layuidemo.mapper.BangKeMapper">
+
+    <select id="findAllBangKeByStatusOrAll" resultType="com.example.layuidemo.entity.BangKe">
+        SELECT
+  user.`id`,
+  `username`,
+  `password`,
+  `amount`,
+  `isenable`,
+  `islocked`,
+  `createDate`,
+  `createBy`,
+  `modifyDate`,
+  `modifyBy`,
+  `phone`
+FROM
+  `newmgr`.`user` ,user_role WHERE user_role.`uid`=user.`id` AND user_role.`rid`=10
+    </select>
+</mapper>

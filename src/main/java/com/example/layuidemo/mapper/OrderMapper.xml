@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.layuidemo.mapper.OrderMapper">
+    <insert id="createOrder" useGeneratedKeys="true" keyProperty="id">
+   INSERT INTO `newmgr`.`order` (
+  `userId`,
+  `productNum`,
+  `productName`,
+  `productPrice`,
+  `useraddress`,
+  `bangkeid`,
+  `createDate`,
+  `createBy`,
+  `modifyDate`,
+  `modifyBy`
+)
+VALUES
+  (
+    #{userId},
+    #{productNum},
+    #{productName},
+    #{productPrice},
+    #{useraddress},
+    #{bangkeid},
+    #{createDate},
+    #{createBy},
+    #{modifyDate},
+    #{modifyBy}
+  ) ;
+
+    </insert>
+    <update id="ModifyKuCun">
+        UPDATE
+  `newmgr`.`product`
+SET
+  `productStack` =`productStack`+ #{num}
+WHERE `id` =        #{id} ;
+  </update>
+    <update id="updateBangKe">
+      UPDATE
+  `newmgr`.`order`
+SET
+  `bangkeid` = #{bangKeId}
+WHERE `id` = #{id} ;
+
+    </update>
+    <update id="updateStatus">
+    UPDATE
+  `newmgr`.`order`
+SET
+  `status` = '1'
+WHERE `id` = #{id} ;
+
+  </update>
+    <select id="findOrderByUserName" resultType="com.example.layuidemo.entity.Order">
+      SELECT
+  o.`id`,
+  (SELECT username FROM `user` a WHERE o.`userId`=a.id) username,
+  `productNum`,
+  `productName`,
+  `productPrice`,
+  `useraddress`,
+  `bangkeid`,
+  o.`createDate`,
+  `status` ,
+ (SELECT  `username` FROM  `newmgr`.`user` r ,user_role WHERE user_role.`uid`=r.`id` AND user_role.`rid`=10 AND o.`bangkeid`=r.`id`) bangKeName
+FROM
+  `newmgr`.`order` o ,`user` u WHERE u.`id`=o.`userId` AND u.`username`=#{name}
+    </select>
+</mapper>

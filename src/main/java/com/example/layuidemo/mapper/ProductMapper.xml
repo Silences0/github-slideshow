@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.layuidemo.mapper.ProductMapper">
+    <select id="getAllProductByPage" resultType="com.example.layuidemo.entity.Product">
+        SELECT *,t.`typeName`,s.`shopName`  FROM product p
+        LEFT JOIN productType t ON  p.`productType` = t.`id`
+        LEFT JOIN shop s ON s.`id`=p.`productShopId`
+
+    </select>
+    <select id="findProductById" resultType="com.example.layuidemo.entity.Product">
+        SELECT
+        `id`,
+        `productName`,
+        `productPrice`,
+        `productShopId`,
+        `productType`,
+        `productStack`,
+        `createDate`,
+        `createBy`,
+        `ModifyDate`,
+        `ModifyBy`
+        FROM
+        `newmgr`.`product` where 1=1
+        <if test="id!= null and id !=0">
+            and id =#{id}
+        </if>
+    </select>
+</mapper>
