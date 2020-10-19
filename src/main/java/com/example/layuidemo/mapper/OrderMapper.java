@@ -13,4 +13,5 @@ public interface OrderMapper {
     int updateBangKe(@Param("id") Integer id , @Param("bangKeId") Integer bangKeId);
     List<Order> findOrderByUserName(@Param("name") String name);
     int updateStatus(Integer id);
+    List<Order> findOrderByBangKeName(String name);
 }

@@ -13,6 +13,6 @@ public interface OrderService {
     int updateBangKe(Integer id, Integer bangKeId);
 
     List<Order> findOrderByUserName(String name);
-
+    List<Order> findOrderByBangKeName(String name);
     int updateStatus(Integer id);
 }

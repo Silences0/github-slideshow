@@ -11,4 +11,7 @@ public interface ProductMapper {
     List<Product> getAllProductByPage();
 
     Product findProductById(Integer id);
+    Product findProductByName(String name);
+
+
 }

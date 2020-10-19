@@ -24,8 +24,8 @@ public class UserController {
     RoleService roleService;
 
     @RequestMapping("adduserobject")
-    public String addUser(String username, String password, String[] roles, String open) {
-        int result = userService.addUser(username, password, roles, open);
+    public String addUser(String username,String phone, String password, String[] roles, String open) {
+        int result = userService.addUser(username, password, roles, open,phone);
         return JSON.toJSONString(result);
     }
 

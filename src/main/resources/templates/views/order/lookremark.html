@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/layuiadmin/style/admin.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<form class="layui-form" method="post">
+    <p th:if="${remarks.size()==0}">
+        暂时没有评价
+    </p>
+    <div class="layui-form-item" th:each="remark:${remarks}">
+        用户名: &nbsp; &nbsp; &nbsp;<span th:text="${remark.getUsername()}"></span>
+        <br>
+        评价: &nbsp; &nbsp; &nbsp;<span th:text="${remark.getContext()}"></span>
+        <br>
+        评分: &nbsp; &nbsp; &nbsp;<span th:utext="${remark.getScoring()}"></span>颗星
+        <br>
+        创建时间: &nbsp; &nbsp; &nbsp;<span th:utext="${remark.getCreattime()}"></span>
+        <br>
+        <hr>
+    </div>
+</form>
+<script src="/static/layuiadmin/layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit', 'laydate', "rate"], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+        var $ = layui.$
+            , form = layui.form;
+        var rate = layui.rate;
+    });
+</script>
+</body>
+</html>

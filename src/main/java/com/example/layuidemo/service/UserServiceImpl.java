@@ -107,9 +107,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public int addUser(String username, String password, String[] roles, String open) {
+    public int addUser(String username, String password, String[] roles, String open,String phone) {
         User user = new User();
         user.setUsername(username);
+        user.setPhone(phone);
         user.setPassword(passwordEncoder.encode(password));
         user.setCreateBy(16);
         user.setModifyBy(16);

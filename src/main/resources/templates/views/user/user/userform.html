@@ -26,6 +26,12 @@
         <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">手机号：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="phone" lay-verify="pass" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">用户角色</label>
         <div class="layui-input-block">
             <input th:each="role:${roles}" type="checkbox" name="roles" th:value="${role.id}" th:title="${role.roleNameZH}">
@@ -91,6 +97,5 @@
             })*/
             //return false;
         });
-
     });
 </script>

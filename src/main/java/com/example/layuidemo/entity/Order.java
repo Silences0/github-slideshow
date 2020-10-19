@@ -11,6 +11,15 @@ public class Order {
     private String useraddress;
     private int bangkeid;
     private String username;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getUsername() {
         return username;

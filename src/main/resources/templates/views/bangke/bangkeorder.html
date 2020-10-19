@@ -41,8 +41,8 @@
             </script>
 
             <script type="text/html" id="barDemo">
-                <a class="layui-btn layui-btn-xs" lay-event="edit">联系帮客</a>
-                <a class="layui-btn layui-btn-xs" lay-event="remark">评论</a>
+                <a class="layui-btn layui-btn-xs" lay-event="edit">联系顾客</a>
+                <a class="layui-btn layui-btn-xs" lay-event="remark">完成订单</a>
             </script>
 
         </div>
@@ -61,23 +61,81 @@
         var $ = layui.$
             , form = layui.form
             , table = layui.table;
+//监听工具条
+        table.on('tool(demo)', function (obj) {
+            var data = obj.data;
+            //lookRemark
+            if (obj.event === 'remark') {
+                if (confirm("确定完成吗")) {
+                    $.ajax({
+                        //几个参数需要注意一下
+                        type: "post",//方法类型
+                        url: "/overOrder/" + data.id + "/" + data.phone + "/" + data.bangkeid,//url
+                        //data:{"ids":ids},
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.data == "success") {
+                                //layer.msg('删除成功');
+                                location.reload();
+                            } else {
+                                layer.msg('修改失败');
+                            }
+                            ;
+                            layer.close(layer.index);
+                        }
+                    })
+                }
+
+            } else if (obj.event === 'edit') {
+                /*var num = prompt("请输入购买商量的数量");
+                alert(num + "id=" + data.bangKeName);*/
+                /*"/sendToBangKe/" + data.bangKeName */
+                layer.open({
+                    type: 2
+                    , title: '联系顾客'
+                    , content: '/sendToBangKe/' + data.username//请求地址
+                    , maxmin: true
+                    , area: ['600px', '400px']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'LAY-user-front-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            //$.ajax({});
+                            table.reload('LAY-user-front-submit'); //数据刷新
+                            layer.close(index); //关闭弹层
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            } else if (obj.event === 'remark') {
+
+            }
+        });
 
         table.render({
             elem: '#LAY-user-manage'
             , id: 'usertable'
-            , url: '/order/list'
+            , url: '/bangKe/orderList'
             , page: true
             , cellMinWidth: 150 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             //,toolbar:'default'
             , totalRow: true
             , cols: [[
                 {type: 'checkbox'},
-                {field: 'id', title: 'ID', width: 100, sort: true, align: 'center'}
+                {field: 'id', title: 'ID', width: 80, sort: true, align: 'center'}
                 , {field: 'productName', title: '商品名称', align: 'center'}
-                , {field: 'productPrice', width: 100, title: '商品价格', align: 'center'}
+                , {field: 'username', title: '用户名称', align: 'center'}
+                , {field: 'bangkeid', title: '帮客编号', align: 'center'}
+                , {field: 'phone', title: '用户电话', align: 'center'}
+                , {field: 'productPrice', width: 80, title: '商品价格', align: 'center'}
                 , {field: 'productNum', title: '购买数量', align: 'center'}
                 , {field: 'createDate', title: '购买时间', align: 'center'}
-                , {field: 'bangKeName', title: '帮客姓名', align: 'center'}
                 , {field: 'statusName', title: '订单状态', align: 'center'}
                 , {field: 'demo', title: '操作', toolbar: '#barDemo', align: 'center'}
             ]]
@@ -94,73 +152,7 @@
                 }
             })
         });
-        //监听工具条
-        table.on('tool(demo)', function (obj) {
-            var data = obj.data;
-            //lookRemark
-            if (obj.event === 'remark') {
-                if (data.statusName == "未完成") {
-                    alert("该订单还未完成，请完成后再添加评论")
-                } else {
-                    layer.open({
-                        type: 2
-                        , title: '添加评论'
-                        , content: '/addRemark?productName=' + data.productName//请求地址
-                        , maxmin: true
-                        , area: ['600px', '400px']
-                        , btn: ['确定', '取消']
-                        , yes: function (index, layero) {
-                            var iframeWindow = window['layui-layer-iframe' + index]
-                                , submitID = 'LAY-user-front-submit'
-                                , submit = layero.find('iframe').contents().find('#' + submitID);
 
-                            //监听提交
-                            iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
-                                var field = data.field; //获取提交的字段
-
-                                //提交 Ajax 成功后，静态更新表格中的数据
-                                //$.ajax({});
-                                table.reload('LAY-user-front-submit'); //数据刷新
-                                layer.close(index); //关闭弹层
-                            });
-
-                            submit.trigger('click');
-                        }
-                    });
-                }
-            } else if (obj.event === 'edit') {
-                /*var num = prompt("请输入购买商量的数量");
-                alert(num + "id=" + data.bangKeName);*/
-                /*"/sendToBangKe/" + data.bangKeName */
-                layer.open({
-                    type: 2
-                    , title: '分配权限'
-                    , content: '/sendToBangKe/' + data.bangKeName//请求地址
-                    , maxmin: true
-                    , area: ['600px', '400px']
-                    , btn: ['确定', '取消']
-                    , yes: function (index, layero) {
-                        var iframeWindow = window['layui-layer-iframe' + index]
-                            , submitID = 'LAY-user-front-submit'
-                            , submit = layero.find('iframe').contents().find('#' + submitID);
-
-                        //监听提交
-                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
-                            var field = data.field; //获取提交的字段
-
-                            //提交 Ajax 成功后，静态更新表格中的数据
-                            //$.ajax({});
-                            table.reload('LAY-user-front-submit'); //数据刷新
-                            layer.close(index); //关闭弹层
-                        });
-
-                        submit.trigger('click');
-                    }
-                });
-            } else if (obj.event === 'remark') {
-
-            }
-        });
         //事件
         var active = {
             batchdel: function () {
@@ -181,8 +173,8 @@
                             //data:{"ids":ids},
                             dataType: "json",
                             success: function (result) {
-                                if (result.data == "success") {
-                                    //layer.msg('删除成功');
+                                if (result == "success") {
+                                    alert("成功！")
                                     location.reload();
                                 } else {
                                     layer.msg('删除失败');

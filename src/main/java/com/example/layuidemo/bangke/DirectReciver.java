@@ -32,7 +32,7 @@ public class DirectReciver {
         User userById = userService.getUserById((int) userId);
         List<BangKe> allBangKeByStatusOrAll = bangKeMapper.findAllBangKeByStatusOrAll();
         Random random = new Random();
-        int i = random.nextInt(allBangKeByStatusOrAll.size() );
+        int i = random.nextInt(allBangKeByStatusOrAll.size());
         BangKe bangKe = allBangKeByStatusOrAll.get(i);
         ZhenziSmsClient zhenziSmsClient = new ZhenziSmsClient("https://sms_developer.zhenzikj.com", "106304", "e377f2e8-0b0a-4a00-a1f2-0497b2b95190");
         try {
@@ -49,16 +49,8 @@ public class DirectReciver {
             orderService.updateBangKe((int) o, bangKe.getId());
             System.out.println("欢迎使用牛中牛服务系统：" +
                     "帮客信息：订单编号为" + o + "，帮客姓名为" + bangKe.getUsername() + "，帮客手机号为" + bangKe.getPhone() + ",帮客已经成功接单。");
-            try {
-                Thread.sleep(60000);
-                int i1 = orderService.updateStatus((int) o);
-                System.out.println("订单信息已经转变成功!" + i1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

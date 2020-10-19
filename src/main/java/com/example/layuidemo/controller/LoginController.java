@@ -124,9 +124,14 @@ public class LoginController {
     }
 
     @RequestMapping("/sendToBangKe/{name}")
-    public String bangKe(@PathVariable String name,Model model) {
+    public String bangKe(@PathVariable String name, Model model) {
         model.addAttribute("bangKeName", name);
         return "/views/bangke/onlinechat";
     }
 
+    @RequestMapping("")
+    public String index() {
+
+        return "";
+    }
 }

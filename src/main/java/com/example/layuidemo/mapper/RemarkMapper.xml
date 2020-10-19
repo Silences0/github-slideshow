@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.layuidemo.mapper.RemarkMapper">
+    <insert id="addRemark">
+        INSERT INTO `newmgr`.`remark` (
+  `productId`,
+  `userId`,
+  `context`,
+  `scoring`,
+  creattime
+)
+VALUES
+  (
+
+    #{productId},
+    #{userId},
+    #{context},
+    #{scoring},
+    #{creattime}
+  ) ;
+
+
+    </insert>
+
+    <select id="findAllRemark" resultType="com.example.layuidemo.entity.Remark">
+       SELECT
+  `id`,
+  `productid`,
+  (SELECT username FROM USER WHERE userId=user.`id`) username,
+  `context`,
+  `scoring`,
+  creattime
+FROM
+  `newmgr`.`remark`  WHERE productid=#{id}
+    </select>
+</mapper>

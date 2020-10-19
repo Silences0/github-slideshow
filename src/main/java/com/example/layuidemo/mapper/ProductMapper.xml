@@ -27,4 +27,22 @@
             and id =#{id}
         </if>
     </select>
+    <select id="findProductByName" resultType="com.example.layuidemo.entity.Product">
+        SELECT
+        `id`,
+        `productName`,
+        `productPrice`,
+        `productShopId`,
+        `productType`,
+        `productStack`,
+        `createDate`,
+        `createBy`,
+        `ModifyDate`,
+        `ModifyBy`
+        FROM
+        `newmgr`.`product` where 1=1
+        <if test="name!= null and name !=''">
+            and productName =#{id}
+        </if>
+    </select>
 </mapper>

@@ -39,8 +39,8 @@
         </if>
     </select>
     <insert id="addUser">
-        insert into user (username,password,isenable,islocked,createDate,createBy,modifyDate,modifyBy,amount)
-         values (#{username},#{password},#{isenable},#{islocked},#{createDate},#{createBy},#{modifyDate},#{modifyBy},#{amount})
+        insert into user (username,password,isenable,islocked,createDate,createBy,modifyDate,modifyBy,amount,phone)
+         values (#{username},#{password},#{isenable},#{islocked},#{createDate},#{createBy},#{modifyDate},#{modifyBy},#{amount},#{phone})
     </insert>
     <delete id="deleteUser">
         delete from user where id in

@@ -23,6 +23,14 @@ public class User implements UserDetails, Serializable {
     private String phone;
     private double money;
 
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+        }
+        return authorities;
+    }
+
     public double getMoney() {
         return money;
     }
@@ -126,7 +134,7 @@ public class User implements UserDetails, Serializable {
 
     @Override
     public boolean isAccountNonExpired() {
-        if(this.isenable==1){
+        if (this.isenable == 1) {
             return true;
         }
         return false;
@@ -134,7 +142,7 @@ public class User implements UserDetails, Serializable {
 
     @Override
     public boolean isAccountNonLocked() {
-        if(this.isenable==1){
+        if (this.isenable == 1) {
             return true;
         }
         return false;
@@ -142,7 +150,7 @@ public class User implements UserDetails, Serializable {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        if(this.isenable==1){
+        if (this.isenable == 1) {
             return true;
         }
         return false;
@@ -150,7 +158,7 @@ public class User implements UserDetails, Serializable {
 
     @Override
     public boolean isEnabled() {
-        if(this.isenable==1){
+        if (this.isenable == 1) {
             return true;
         }
         return false;
@@ -161,13 +169,7 @@ public class User implements UserDetails, Serializable {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for(Role role:roles){
-            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-        }
-        return authorities;
-    }
+
 
     public String getPassword() {
         return password;

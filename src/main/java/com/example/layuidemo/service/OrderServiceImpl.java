@@ -74,6 +74,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> findOrderByBangKeName(String name) {
+
+        return orderMapper.findOrderByBangKeName(name);
+    }
+
+    @Override
     public int updateStatus(Integer id) {
 
         return orderMapper.updateStatus(id);

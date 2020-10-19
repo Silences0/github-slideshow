@@ -27,7 +27,7 @@ public interface UserService {
 
     int deleteUser(@Param("ids") int[] ids);
 
-    int addUser(String username, String password, String[] roles, String open);
+    int addUser(String username, String password, String[] roles, String open,String phone);
 
     int getCount(Integer id, String email, String username);
 

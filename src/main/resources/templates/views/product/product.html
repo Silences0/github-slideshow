@@ -40,13 +40,10 @@
             <script type="text/html" id="imgTpl">
                 <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
             </script>
-
             <script type="text/html" id="barDemo">
-                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+                <a class="layui-btn layui-btn-xs" lay-event="detail">查看评论</a>
                 <a class="layui-btn layui-btn-xs" lay-event="edit">下单</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
             </script>
-
         </div>
     </div>
 </div>
@@ -103,11 +100,30 @@
         table.on('tool(demo)', function (obj) {
             var data = obj.data;
             if (obj.event === 'detail') {
-                layer.msg('ID：' + data.id + ' 的查看操作');
-            } else if (obj.event === 'del') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
-                    layer.close(index);
+                layer.open({
+                    type: 2
+                    , title: '查看评价'
+                    , content: '/lookRemark/' + data.id//请求地址
+                    , maxmin: true
+                    , area: ['600px', '400px']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'LAY-user-front-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            //$.ajax({});
+                            table.reload('LAY-user-front-submit'); //数据刷新
+                            layer.close(index); //关闭弹层
+                        });
+
+                        submit.trigger('click');
+                    }
                 });
             } else if (obj.event === 'edit') {
                 var num = prompt("请输入购买商量的数量");

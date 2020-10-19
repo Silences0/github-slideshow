@@ -69,4 +69,20 @@ WHERE `id` = #{id} ;
 FROM
   `newmgr`.`order` o ,`user` u WHERE u.`id`=o.`userId` AND u.`username`=#{name}
     </select>
+    <select id="findOrderByBangKeName" resultType="com.example.layuidemo.entity.Order">
+      SELECT
+  o.`id`,
+  (SELECT username FROM `user` a WHERE o.`userId`=a.id) username,
+  (SELECT phone FROM `user` b WHERE b.id=o.`userId`) phone,
+  `productNum`,
+  `productName`,
+  `productPrice`,
+  `useraddress`,
+  `bangkeid`,
+  o.`createDate`,
+  `status` ,
+ (SELECT  `username` FROM  `newmgr`.`user` r ,user_role WHERE user_role.`uid`=r.`id` AND user_role.`rid`=10 AND o.`bangkeid`=r.`id`) bangKeName
+FROM
+  `newmgr`.`order` o ,`user` u WHERE u.`id`=o.`bangkeid` AND u.`username`=#{name}
+    </select>
 </mapper>
